@@ -3,7 +3,7 @@
 from setuptools import setup, find_packages
 import os
 
-dir = os.path.abspath(path.dirname(__file__))
+dir = os.path.abspath(os.path.dirname(__file__))
 
 with open(os.path.join(dir, 'README.md')) as f:
     description = f.read()
