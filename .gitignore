@@ -110,3 +110,7 @@ default.nix
 *.#*
 
 .DS_Store
+
+Pipfile*
+main.py
+parse.py

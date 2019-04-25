@@ -13,6 +13,8 @@ at interpreting JSON schema as
 system](https://mypy.readthedocs.io/en/latest/extending_mypy.html) here. You
 have been warned.
 
+This leverages (and is inspired by) https://github.com/Julian/jsonschema.
+
 ## Overview
 
 A JSON schema:
@@ -45,6 +47,30 @@ data['description'] = 'there is no description'  # TypedDict "FooSchema" has no 
 data['awesome'] = 42
 data['awesome'] = None  # Argument 2 has incompatible type "None"; expected "Union[int, float]"
 ```
+
+## Installation
+
+```bash
+pip install jsonschema-typed
+```
+
+or
+
+```bash
+git clone git@github.com:erickpeirson/jsonschema-typed.git
+cd jsonschema-typed
+python setup.py install
+```
+
+## Requirements
+
+So far I have only tried this with:
+
+- mypy==0.701
+- jsonschema==3.0.1
+
+But probably older versions work. You could try it out and
+[let me know](https://github.com/erickpeirson/jsonschema-typed/issues).
 
 ## Limitations
 
@@ -169,3 +195,9 @@ data['description'] = 'there is no description'  # TypedDict "FooSchema" has no 
 data['awesome'] = 42
 data['awesome'] = None  # Argument 2 has incompatible type "None"; expected "Union[int, float]"
 ```
+
+## TODO
+
+- [ ] Decide whether to stick with just one approach (and which one)
+- [ ] Write some tests
+- [ ] Test against other versions of mypy + jsonschema
