@@ -3,6 +3,7 @@
 import os
 import warnings
 from mypy.plugin import Plugin, AnalyzeTypeContext, DynamicClassDefContext
+from mypy.types import RawExpressionType
 import json
 from typing import Optional, Callable, Any, Union, List, Set, Dict
 import copy
@@ -30,6 +31,23 @@ def formatwarning(message, category, filepath, lineno, line=None):
 
 
 warnings.formatwarning = formatwarning
+
+def import_from_string(val: str) -> Any:  # pragma: no cover
+    """
+    Attempt to import a class from a string representation.
+
+    From: https://github.com/tomchristie/django-rest-framework/blob/master/rest_framework/settings.py
+    """
+    import importlib
+    try:
+        # Nod to tastypie's use of importlib.
+        parts = val.split('.')
+        module_path, class_name = '.'.join(parts[:-1]), parts[-1]
+        module = importlib.import_module(module_path)
+        return getattr(module, class_name)
+    except ImportError as e:
+        msg = "Could not import '%s' for setting. %s: %s." % (val, e.__class__.__name__, e)
+        raise ImportError(msg)
 
 
 class API:
@@ -347,8 +365,15 @@ class JSONSchemaPlugin(Plugin):
                 if not ctx.type.args:
                     return ctx.type
                 schema_path, = ctx.type.args
-                schema_path = os.path.abspath(schema_path.literal_value)
-                schema = self._load_schema(schema_path)
+
+                if type(schema_path) is RawExpressionType:
+                    schema_path = os.path.abspath(schema_path.literal_value)
+                    schema = self._load_schema(schema_path)
+                else:
+                    # schema = test_server.schema.schema?
+                    # remove ? at the the end
+                    path = str(schema_path)[:-1]
+                    schema = import_from_string(path)
                 make_type = TypeMaker(schema_path, schema)
                 _type = make_type(ctx)
                 return _type
