@@ -3,11 +3,12 @@
 import json
 import os
 import warnings
+import uuid
 from collections import OrderedDict
 from typing import Optional, Callable, Any, Union, List, Set, Dict
 
-from jsonschema import RefResolver
-from jsonschema.validators import _id_of as id_of
+from jsonschema import RefResolver  # type: ignore
+from jsonschema.validators import _id_of as id_of  # type: ignore
 from mypy.nodes import TypeInfo, ClassDef, Block, SymbolTable, SymbolTableNode, GDEF
 from mypy.plugin import Plugin, AnalyzeTypeContext, DynamicClassDefContext
 from mypy.types import (
@@ -37,8 +38,8 @@ warnings.formatwarning = formatwarning
 class API:
     """Base class for JSON schema types API."""
 
-    NO_VALUE = "the buffalo from buffalo who are buffaloed by the buffalo"
-    """Needed something other than `None`, so why not."""
+    # Custom None value, used to differentiate from other sources of None.
+    NO_VALUE = "__jsonschema_typed_special_None__" + str(uuid.uuid4())
 
     def __init__(self, resolver: RefResolver, outer_name: str) -> None:
         """Initialize with a resolver."""
