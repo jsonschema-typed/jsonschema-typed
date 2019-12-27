@@ -150,7 +150,7 @@ class Foo(dict):
         """Do something awesome."""
         return arg * self['awesome']
 
-data: JSONSchema['schema/test.json'] = Foo(title='baz')
+data: JSONSchema['schema/readme_example.json'] = Foo(title='baz')
 reveal_type(data)  # Revealed type is 'TypedDict('FooSchema', {'title'?: builtins.str, 'awesome'?: Union[builtins.int, builtins.float]})'
 data['description'] = 'there is no description'  # TypedDict "FooSchema" has no key 'description'
 data['awesome'] = 42
