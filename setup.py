@@ -15,8 +15,9 @@ setup(
     url="https://github.com/bsamseth/jsonschema-typed",
     python_requires=">=3.8",  # At least to develop, possibly importable in lower versions?
     license="MIT",
-    version="0.2.0",
+    version="0.2.1",
     packages=["jsonschema_typed"],
+    package_data={"jsonschema_typed": ["py.typed"]},
     zip_safe=False,
     install_requires=[
         "jsonschema>=3.2.0",
