@@ -2,6 +2,7 @@
 
 import json
 import os
+import re
 import warnings
 import uuid
 from collections import OrderedDict
@@ -404,10 +405,18 @@ class JSONSchemaPlugin(Plugin):
                 """Generate annotations from a JSON Schema."""
                 if not ctx.type.args:
                     return ctx.type
-                (schema_path,) = ctx.type.args
+                schema_path, *_ = ctx.type.args
                 schema_path = os.path.abspath(schema_path.literal_value)
                 schema = self._load_schema(schema_path)
-                make_type = TypeMaker(schema_path, schema)
+
+                draft_version = schema.get("$schema", "default")
+                api_version = {
+                    "draft-04": APIv4,
+                    "draft-06": APIv6,
+                    "draft-07": APIv7,
+                }.get(next(re.finditer(r"draft-\d+", draft_version)).group(), APIv7)
+
+                make_type = TypeMaker(schema_path, schema, api_version=api_version)
                 _type = make_type(ctx)
                 return _type
 
