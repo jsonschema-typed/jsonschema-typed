@@ -1,7 +1,9 @@
 """Install jsonschema-typed."""
 
-from setuptools import setup
 import os
+from setuptools import setup
+
+from version import get_version
 
 repo_base_dir = os.path.abspath(os.path.dirname(__file__))
 
@@ -15,7 +17,7 @@ setup(
     url="https://github.com/bsamseth/jsonschema-typed",
     python_requires=">=3.8",  # At least to develop, possibly importable in lower versions?
     license="MIT",
-    version="0.2.1",
+    version=get_version(),
     packages=["jsonschema_typed"],
     package_data={"jsonschema_typed": ["py.typed"]},
     zip_safe=False,

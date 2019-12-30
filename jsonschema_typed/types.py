@@ -1,13 +1,13 @@
-"""Placeholders for supported annotations."""
+"""
+The jsonschema_typed library provides a single type definition, `JSONSchema`.
 
-from typing import Type, Generic, TypeVar
-from mypy_extensions import TypedDict
+Please note that at runtime, this type is only an alias to `typing.Type`, and
+does not hold any relevant properties or information. The type has special behaviour
+only to mypy after the plugin has been installed and enabled. This means that the type
+should not be used in any context other than for annotations.
+"""
+
+from typing import Type
 
 
-class JSONSchema(dict):
-    """Placeholder for JSON schema TypedDict."""
-
-
-def JSONSchemaBase(schema_path: str) -> Type[dict]:
-    """Generate a base class for JSON-schema powered TypedDicts."""
-    return dict
+JSONSchema = Type
