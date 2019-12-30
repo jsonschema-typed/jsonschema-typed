@@ -40,7 +40,8 @@ A JSON schema:
 A TypedDict:
 
 ```python
-from jsonschema_typed.types import JSONSchema
+
+from jsonschema_typed import JSONSchema
 
 data: JSONSchema['path/to/schema.json'] = dict(title='baz')
 data['description'] = 'there is no description'  # TypedDict "FooSchema" has no key 'description'
@@ -122,7 +123,8 @@ This has the advantage of being fairly simple. It is implemented via
 ``jsonschema_typed.plugin.JSONSchemaPlugin.get_type_analyze_hook``.
 
 ```python
-from jsonschema_typed.types import JSONSchema
+
+from jsonschema_typed import JSONSchema
 
 data: JSONSchema['path/to/schema.json'] = dict(title='baz')
 reveal_type(data)  # Revealed type is 'TypedDict('FooSchema', {'title'?: builtins.str, 'awesome'?: Union[builtins.int, builtins.float]})'

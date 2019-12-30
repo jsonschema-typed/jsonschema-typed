@@ -394,8 +394,7 @@ class APIv7(APIv6):
 class JSONSchemaPlugin(Plugin):
     """Provides support for the JSON Schema as TypedDict."""
 
-    JSONSchema = "jsonschema_typed.types.JSONSchema"
-    JSONSchemaBase = "jsonschema_typed.types.JSONSchemaBase"
+    JSONSchema = "jsonschema_typed.JSONSchema"
 
     def get_type_analyze_hook(self, fullname: str) -> Optional[Callable]:
         """Produce an analyzer callback if a JSONSchema annotation is found."""
@@ -421,12 +420,6 @@ class JSONSchemaPlugin(Plugin):
                 return _type
 
             return callback
-
-    def get_dynamic_class_hook(self, fullname: str) -> Optional[Callable]:
-        """Add support for ``JSONSchemaBase``."""
-        if fullname == self.JSONSchemaBase:
-            return self.dyn_class_hook
-        return None
 
     def _load_schema(self, path: str) -> dict:
         with open(path) as f:
