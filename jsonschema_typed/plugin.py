@@ -3,14 +3,14 @@
 import json
 import os
 import re
-import warnings
 import uuid
+import warnings
 from collections import OrderedDict
 from typing import Optional, Callable, Any, Union, List, Set, Dict
 
 from jsonschema import RefResolver  # type: ignore
 from jsonschema.validators import _id_of as id_of  # type: ignore
-from mypy.nodes import TypeInfo, ClassDef, Block, SymbolTable, SymbolTableNode, GDEF
+from mypy.nodes import TypeInfo, ClassDef, Block, SymbolTable
 from mypy.plugin import Plugin, AnalyzeTypeContext, DynamicClassDefContext
 from mypy.types import (
     TypedDictType,
@@ -22,8 +22,8 @@ from mypy.types import (
     Type,
 )
 
-ISSUE_URL = "https://github.com/erickpeirson/jsonschema-typed"
-"""Raise issues here."""
+# Raise issues here.
+ISSUE_URL = "https://github.com/bsamseth/jsonschema-typed"
 
 
 # Monkey-patching `warnings.formatwarning`.
@@ -435,29 +435,6 @@ class JSONSchemaPlugin(Plugin):
     def get_additional_deps(self, file):
         """Add ``mypy_extensions`` as a dependency."""
         return [(10, "mypy_extensions", -1)]
-
-    def dyn_class_hook(self, ctx: DynamicClassDefContext) -> TypedDictType:
-        """Generate annotations from a JSON Schema."""
-        (schema_path,) = ctx.call.args
-        schema_path = os.path.abspath(schema_path.value)
-        schema = self._load_schema(schema_path)
-        make_type = TypeMaker(schema_path, schema)
-        td_type = make_type(ctx)
-
-        class_def = ClassDef(ctx.name, Block([]))
-        class_def.fullname = ctx.api.qualified_name(ctx.name)
-        info = TypeInfo(SymbolTable(), class_def, ctx.api.cur_mod_id)
-        info.typeddict_type = td_type
-
-        dict_type = named_builtin_type(ctx, "dict")
-        mro = dict_type.type.mro
-        if not mro:
-            mro = [dict_type.type, named_builtin_type(ctx, "object").type]
-
-        class_def.info = info
-        info.mro = mro
-        info.bases = [dict_type]
-        ctx.api.add_symbol_table_node(ctx.name, SymbolTableNode(GDEF, info))
 
 
 class TypeMaker:
