@@ -37,7 +37,7 @@ cases: List[Tuple[str, Expect]] = [
         "check_required.py",
         Expect(
             normal="""
-                error: Key 'awesome' missing for TypedDict "FooSchema" 
+                error: Key 'awesome' missing for TypedDict "FooSchema"
                 note: Revealed type is 'TypedDict('FooSchema', {'title'?: builtins.str, 'awesome': builtins.int})'
                 error: TypedDict "FooSchema" has no key 'description'
                 error: Argument 2 has incompatible type "None"; expected "int"
@@ -53,6 +53,17 @@ cases: List[Tuple[str, Expect]] = [
                 note: Revealed type is 'TypedDict('FooSchema', {'title'?: builtins.str, 'awesome'?: builtins.int})'
                 error: TypedDict "FooSchema" has no key 'description'
                 error: Argument 2 has incompatible type "None"; expected "int"
+            """,
+            error="",
+            exit_status=1,
+        ),
+    ),
+    (
+        "nonetype.py",
+        Expect(
+            normal="""
+                note: Revealed type is 'TypedDict('NoneSchema', {'title'?: builtins.str, 'awesome'?: Union[builtins.list[Any], None]})'
+                error: Argument 2 has incompatible type "int"; expected "Optional[List[Any]]"
             """,
             error="",
             exit_status=1,
