@@ -29,7 +29,7 @@ cases: List[Tuple[str, Expect]] = [
                 error: TypedDict "FooSchema" has no key 'description'
                 error: Argument 2 has incompatible type "None"; expected "int"
             """,
-            error="""""",
+            error="",
             exit_status=1,
         ),
     ),
@@ -42,7 +42,19 @@ cases: List[Tuple[str, Expect]] = [
                 error: TypedDict "FooSchema" has no key 'description'
                 error: Argument 2 has incompatible type "None"; expected "int"
             """,
-            error="""""",
+            error="",
+            exit_status=1,
+        ),
+    ),
+    (
+        "alias.py",
+        Expect(
+            normal="""
+                note: Revealed type is 'TypedDict('FooSchema', {'title'?: builtins.str, 'awesome'?: builtins.int})'
+                error: TypedDict "FooSchema" has no key 'description'
+                error: Argument 2 has incompatible type "None"; expected "int"
+            """,
+            error="",
             exit_status=1,
         ),
     ),
