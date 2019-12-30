@@ -20,6 +20,7 @@ from mypy.types import (
     AnyType,
     TypeOfAny,
     Type,
+    NoneType,
 )
 
 # Raise issues here.
@@ -321,6 +322,10 @@ class APIv4(API):
         """Generate an ``int`` annotation."""
         return named_builtin_type(ctx, "int")
 
+    def null(self, ctx: AnalyzeTypeContext, *args, **kwargs):
+        """Generate an ``int`` annotation."""
+        return NoneType()
+
     def default(self, ctx: AnalyzeTypeContext, *args, **kwargs) -> None:
         """
         The ``default`` keyword is not supported.
@@ -462,14 +467,7 @@ def plugin(version: str):
     return JSONSchemaPlugin
 
 
-def named_builtin_type(
-    ctx: Union[AnalyzeTypeContext, DynamicClassDefContext], name: str, *args, **kwargs
-) -> Type:
-    """
-    For some reason (probably a good one) these APIs expect different names.
-    """
-    if type(ctx) is AnalyzeTypeContext:
-        mod = "builtins"
-    elif type(ctx) is DynamicClassDefContext:
-        mod = "__builtins__"
+def named_builtin_type(ctx: AnalyzeTypeContext, name: str, *args, **kwargs) -> Type:
+    assert type(ctx) is AnalyzeTypeContext
+    mod = "builtins"
     return ctx.api.named_type(f"{mod}.{name}", *args, **kwargs)
