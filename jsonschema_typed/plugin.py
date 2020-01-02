@@ -473,14 +473,17 @@ class JSONSchemaPlugin(Plugin):
             assert (
                 "properties" in schema
             ), "Schema has no properties, cannot make a sub-schema."
-            assert key in schema["properties"], "Invalid key path for sub-schema."
+            assert (
+                key == "#" or key in schema["properties"]
+            ), "Invalid key path for sub-schema."
 
-            schema.update(schema["properties"][key])
+            if key != "#":
+                schema.update(schema["properties"][key])
 
-            if "$id" in schema:
-                schema["$id"] += f"/{key}"
-            if "title" in schema:
-                schema["title"] += f" {key}"
+                if "$id" in schema:
+                    schema["$id"] += f"/{key}"
+                if "title" in schema:
+                    schema["title"] += f" {key}"
 
         if "properties" in schema and schema["type"] != "object":
             del schema["properties"]
