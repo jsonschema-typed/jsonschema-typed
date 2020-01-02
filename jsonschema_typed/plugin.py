@@ -4,9 +4,11 @@ import json
 import os
 import re
 import uuid
+import importlib
 import warnings
 from collections import OrderedDict
 from typing import Optional, Callable, Any, Union, List, Set, Dict
+from abc import abstractmethod
 
 from jsonschema import RefResolver  # type: ignore
 from jsonschema.validators import _id_of as id_of  # type: ignore
@@ -21,6 +23,8 @@ from mypy.types import (
     TypeOfAny,
     Type,
     NoneType,
+    UnboundType,
+    RawExpressionType,
 )
 
 # Raise issues here.
@@ -81,7 +85,7 @@ class API:
         # An instance validates if and only if the instance is in any of the
         # sets listed for this keyword.
         schema_type = schema.get("type")
-        if type(schema_type) is list:
+        if isinstance(schema_type, list):
             if outer:
                 # Cases in which the root of the schema is anything other than
                 # an object are not terribly interesting for this project, so
@@ -119,6 +123,8 @@ class API:
         if scope:
             self.resolver.pop_scope()
 
+        assert isinstance(schema_type, str)
+
         if outer and schema_type != "object":
             raise NotImplementedError(
                 "Schemas with a root type other than ``object`` are not"
@@ -143,19 +149,41 @@ class API:
         )
         return AnyType(TypeOfAny.unannotated)
 
+    @abstractmethod
+    def ref(self, *args, **kwargs):
+        pass
+
+    @abstractmethod
+    def allOf(self, ctx: AnalyzeTypeContext, subschema: List, **kwargs) -> UnionType:
+        pass
+
+    @abstractmethod
+    def anyOf(self, ctx: AnalyzeTypeContext, subschema: List, **kwargs) -> UnionType:
+        pass
+
+    @abstractmethod
+    def enum(
+        self, ctx: AnalyzeTypeContext, values: List[Union[str, int]], *_, **kwargs
+    ) -> UnionType:
+        pass
+
+    @abstractmethod
+    def default(self, *args, **kwargs):
+        pass
+
 
 class APIv4(API):
     """JSON Schema draft 4."""
 
     def const(
-        self, ctx: AnalyzeTypeContext, const: Union[int, str, bool], **kwargs
+        self, ctx: AnalyzeTypeContext, const: Union[int, str, bool], *_, **__
     ) -> LiteralType:
         """Generate a ``Literal`` for a const value."""
         name = type(const).__name__
         return LiteralType(const, named_builtin_type(ctx, name, []))
 
     def enum(
-        self, ctx: AnalyzeTypeContext, values: List[Union[str, int]], **kwargs
+        self, ctx: AnalyzeTypeContext, values: List[Union[str, int]], *_, **kwargs
     ) -> UnionType:
         """Generate a ``Union`` of ``Literal``s for an enum."""
         return UnionType([self.const(ctx, value) for value in values])
@@ -213,6 +241,7 @@ class APIv4(API):
             )
             instance = Instance(info, [])
             td = info.typeddict_type
+            assert td is not None
             typing_type = td.copy_modified(
                 item_types=list(td.items.values()), fallback=instance
             )
@@ -241,7 +270,9 @@ class APIv4(API):
             inner_types = []
         return named_builtin_type(ctx, "list", inner_types)
 
-    def allOf(self, ctx: AnalyzeTypeContext, subschema: List[dict], **kwargs):
+    def allOf(
+        self, ctx: AnalyzeTypeContext, subschema: List[dict], **kwargs
+    ) -> UnionType:
         """
         Generate a ``Union`` annotation with the allowed types.
 
@@ -263,7 +294,7 @@ class APIv4(API):
             )
         )
 
-    def anyOf(self, ctx: AnalyzeTypeContext, subschema: List, **kwargs):
+    def anyOf(self, ctx: AnalyzeTypeContext, subschema: List, **kwargs) -> UnionType:
         """Generate a ``Union`` annotation with the allowed types."""
         return UnionType(
             list(
@@ -401,6 +432,62 @@ class JSONSchemaPlugin(Plugin):
 
     JSONSchema = "jsonschema_typed.JSONSchema"
 
+    @staticmethod
+    def make_subschema(schema: Dict[str, Any], key_path: List[str]):
+        """
+        Extract a property from the schema (changing in place).
+
+        If `obj` is a structure that validates against the given schema, the `key_path`
+        is interpreted as `obj[key_path[0]][key_path[1]]...[key_path[-1]]`.
+
+        This will effectively make a schema where the indexed object is
+        the the type being described.
+        """
+
+        # Only inherit the require things, all other info is dropped.
+        # E.g. things such as `required` do not affect schemas for sub-objects.
+        for k in list(schema.keys()):
+            if k not in ("$schema", "$id", "title", "type", "properties"):
+                del schema[k]
+
+        for key in key_path:
+            assert schema.get("type") == "object", (
+                "Attempted to build a schema type from a non-object type."
+                "The base type must be 'object' (aka. a dict)."
+            )
+            assert (
+                "properties" in schema
+            ), "Schema has no properties, cannot make a sub-schema."
+            assert key in schema["properties"], "Invalid key path for sub-schema."
+            assert (
+                "properties" in schema["properties"][key]
+            ), "Invalid path for sub-schema, indexed section has no 'properties' attribute."
+
+            schema.update(schema["properties"][key])
+
+            if "$id" in schema:
+                schema["$id"] += f"/{key}"
+            if "title" in schema:
+                schema["title"] += f" {key}"
+
+        return schema
+
+    @staticmethod
+    def resolve_var(value: Union[RawExpressionType, UnboundType]):
+        var: str
+        if isinstance(value, RawExpressionType):
+            var = value.literal_value
+        else:
+            var = value.original_str_expr
+
+        if not var.startswith("var:"):
+            return var
+
+        path = var.split(":")[-1]
+        split = path.split(".")
+        module = importlib.import_module(".".join(split[:-1]))
+        return eval(f"module.{split[-1]}")
+
     def get_type_analyze_hook(self, fullname: str) -> Optional[Callable]:
         """Produce an analyzer callback if a JSONSchema annotation is found."""
         if fullname == self.JSONSchema:
@@ -409,9 +496,13 @@ class JSONSchemaPlugin(Plugin):
                 """Generate annotations from a JSON Schema."""
                 if not ctx.type.args:
                     return ctx.type
-                schema_path, *_ = ctx.type.args
-                schema_path = os.path.abspath(schema_path.literal_value)
+                schema_path, *key_path = list(map(self.resolve_var, ctx.type.args))
+
+                schema_path = os.path.abspath(schema_path)
                 schema = self._load_schema(schema_path)
+
+                if key_path:
+                    schema = self.make_subschema(schema, key_path)
 
                 draft_version = schema.get("$schema", "default")
                 api_version = {
@@ -467,7 +558,7 @@ def plugin(version: str):
     return JSONSchemaPlugin
 
 
-def named_builtin_type(ctx: AnalyzeTypeContext, name: str, *args, **kwargs) -> Type:
+def named_builtin_type(ctx: AnalyzeTypeContext, name: str, *args, **kwargs) -> Instance:
     assert type(ctx) is AnalyzeTypeContext
     mod = "builtins"
     return ctx.api.named_type(f"{mod}.{name}", *args, **kwargs)

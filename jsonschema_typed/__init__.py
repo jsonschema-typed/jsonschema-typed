@@ -6,3 +6,8 @@ class JSONSchema(dict):
 
     def __class_getitem__(cls, item):
         return dict
+
+
+dummy_path = "schema/nested.json"
+awesome = "awesome"
+nested = "nested"
