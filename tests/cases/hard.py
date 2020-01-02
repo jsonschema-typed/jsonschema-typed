@@ -6,6 +6,8 @@ data: JSONSchema["schema/hard.json"]
 number: JSONSchema["schema/hard.json", "num"]
 status: JSONSchema["schema/hard.json", "status"]
 diagnostics: JSONSchema["schema/hard.json", "status", "diagnostics"]
+
+diagnostics = [{"level": "warn"}]
 if TYPE_CHECKING:
     reveal_type(data)
     reveal_type(number)

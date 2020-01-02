@@ -85,6 +85,12 @@ cases: List[Tuple[str, Expect]] = [
         "hard.py",
         Expect(
             normal="""
+                note: Revealed type is 'TypedDict('ComplicatedJson', {'num': builtins.int, 'status': builtins.list[TypedDict({'code'?: Union[Literal['success'], Literal['failure']], 'diagnostics'?: builtins.list[TypedDict({'field'?: builtins.str, 'illegal_value'?: builtins.str, 'level': Union[Literal['info'], Literal['warn'], Literal['error']], 'mismatch_fields'?: builtins.list[builtins.str], 'ids'?: builtins.list[TypedDict({'id': builtins.int, 'thing_type'?: Union[Literal['A'], Literal['B']]})]})], 'message'?: builtins.str, 'module': Union[Literal['m1'], Literal['m2']]})]})'
+                note: Revealed type is 'builtins.int'
+                note: Revealed type is 'builtins.list[TypedDict({'code'?: Union[Literal['success'], Literal['failure']], 'diagnostics'?: builtins.list[TypedDict({'field'?: builtins.str, 'illegal_value'?: builtins.str, 'level': Union[Literal['info'], Literal['warn'], Literal['error']], 'mismatch_fields'?: builtins.list[builtins.str], 'ids'?: builtins.list[TypedDict({'id': builtins.int, 'thing_type'?: Union[Literal['A'], Literal['B']]})]})], 'message'?: builtins.str, 'module': Union[Literal['m1'], Literal['m2']]})]'
+                note: Revealed type is 'TypedDict({'code'?: Union[Literal['success'], Literal['failure']], 'diagnostics'?: builtins.list[TypedDict({'field'?: builtins.str, 'illegal_value'?: builtins.str, 'level': Union[Literal['info'], Literal['warn'], Literal['error']], 'mismatch_fields'?: builtins.list[builtins.str], 'ids'?: builtins.list[TypedDict({'id': builtins.int, 'thing_type'?: Union[Literal['A'], Literal['B']]})]})], 'message'?: builtins.str, 'module': Union[Literal['m1'], Literal['m2']]})'
+                note: Revealed type is 'builtins.list[TypedDict({'field'?: builtins.str, 'illegal_value'?: builtins.str, 'level': Union[Literal['info'], Literal['warn'], Literal['error']], 'mismatch_fields'?: builtins.list[builtins.str], 'ids'?: builtins.list[TypedDict({'id': builtins.int, 'thing_type'?: Union[Literal['A'], Literal['B']]})]})]'
+                note: Revealed type is 'TypedDict({'field'?: builtins.str, 'illegal_value'?: builtins.str, 'level': Union[Literal['info'], Literal['warn'], Literal['error']], 'mismatch_fields'?: builtins.list[builtins.str], 'ids'?: builtins.list[TypedDict({'id': builtins.int, 'thing_type'?: Union[Literal['A'], Literal['B']]})]})'
             """,
             error="",
             exit_status=1,

@@ -134,6 +134,16 @@ class API:
         schema_type: str,
         outer=False,
     ) -> Type:
+
+        # Enums get special treatment, as they should be one of the literal values.
+        # Note: If a "type" field indicates types that are incompatible with some of
+        # the enumeration values (which is allowed by jsonschema), the "type" will _not_
+        # be respected. This should be considered a malformed schema anyway, so this
+        # will not be fixed.
+        if "enum" in schema:
+            handler = self.get_type_handler("enum")
+            return handler(ctx, schema["enum"])
+
         handler = self.get_type_handler(schema_type)
         if handler is not None:
             return handler(ctx, schema, outer=outer)
