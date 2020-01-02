@@ -15,7 +15,7 @@ setup(
     author="Bendik Samseth",
     author_email="b.samseth@gmail.com",
     url="https://github.com/bsamseth/jsonschema-typed",
-    python_requires=">=3.8",  # At least to develop, possibly importable in lower versions?
+    python_requires=">=3.7",  # Really should have 3.8 for Final and Literal, but usable without.
     license="MIT",
     version=get_version(),
     packages=["jsonschema_typed"],
