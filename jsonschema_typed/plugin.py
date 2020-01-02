@@ -125,11 +125,6 @@ class API:
 
         assert isinstance(schema_type, str)
 
-        if outer and schema_type != "object":
-            raise NotImplementedError(
-                "Schemas with a root type other than ``object`` are not"
-                " currently supported."
-            )
         return self._get_type(ctx, schema, schema_type, outer=outer)
 
     def _get_type(
@@ -451,6 +446,16 @@ class JSONSchemaPlugin(Plugin):
                 del schema[k]
 
         for key in key_path:
+
+            if schema.get("type") == "array":
+                while "items" in schema:
+                    items = schema["items"]
+                    del schema["items"]
+                    schema.update(items)
+
+                if schema["type"] != "object":
+                    return schema
+
             assert schema.get("type") == "object", (
                 "Attempted to build a schema type from a non-object type."
                 "The base type must be 'object' (aka. a dict)."
@@ -459,9 +464,6 @@ class JSONSchemaPlugin(Plugin):
                 "properties" in schema
             ), "Schema has no properties, cannot make a sub-schema."
             assert key in schema["properties"], "Invalid key path for sub-schema."
-            assert (
-                "properties" in schema["properties"][key]
-            ), "Invalid path for sub-schema, indexed section has no 'properties' attribute."
 
             schema.update(schema["properties"][key])
 
@@ -469,6 +471,9 @@ class JSONSchemaPlugin(Plugin):
                 schema["$id"] += f"/{key}"
             if "title" in schema:
                 schema["title"] += f" {key}"
+
+        if "properties" in schema and schema["type"] != "object":
+            del schema["properties"]
 
         return schema
 
