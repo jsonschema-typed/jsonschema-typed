@@ -7,7 +7,7 @@ repos:
     -   id: end-of-file-fixer
     -   id: trailing-whitespace
     -   id: pretty-format-json
-        args: [--autofix]
+        args: [--autofix, --no-sort-keys]
     -   id: check-builtin-literals
     -   id: check-docstring-first
     -   id: check-merge-conflict
