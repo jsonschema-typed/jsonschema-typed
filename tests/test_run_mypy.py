@@ -73,8 +73,8 @@ cases: List[Tuple[str, Expect]] = [
         "nested.py",
         Expect(
             normal="""
-                note: Revealed type is 'TypedDict('NestedFooSchema', {'title': builtins.str, 'awesome'?: TypedDict({'thing': builtins.int, 'nested'?: TypedDict({'thing': builtins.str})})})'
-                note: Revealed type is 'TypedDict('NestedFooSchemaAwesome', {'thing': builtins.int, 'nested'?: TypedDict({'thing': builtins.str})})'
+                note: Revealed type is 'TypedDict('NestedFooSchema', {'title': builtins.str, 'awesome'?: TypedDict({'nested'?: TypedDict({'thing': builtins.str}), 'thing': builtins.int})})'
+                note: Revealed type is 'TypedDict('NestedFooSchemaAwesome', {'nested'?: TypedDict({'thing': builtins.str}), 'thing': builtins.int})'
                 note: Revealed type is 'TypedDict('NestedFooSchemaAwesomeNested', {'thing': builtins.str})'
             """,
             error="",

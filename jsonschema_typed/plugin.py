@@ -483,10 +483,9 @@ class JSONSchemaPlugin(Plugin):
         if not var.startswith("var:"):
             return var
 
-        path = var.split(":")[-1]
-        split = path.split(".")
-        module = importlib.import_module(".".join(split[:-1]))
-        return eval(f"module.{split[-1]}")
+        _, path, variable = var.split(":")
+        module = importlib.import_module(path)
+        return eval(f"module.{variable}")
 
     def get_type_analyze_hook(self, fullname: str) -> Optional[Callable]:
         """Produce an analyzer callback if a JSONSchema annotation is found."""

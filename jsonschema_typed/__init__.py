@@ -9,5 +9,10 @@ class JSONSchema(dict):
 
 
 dummy_path = "schema/nested.json"
-awesome = "awesome"
+
+
+class Awesome:
+    key = "awesome"
+
+
 nested = "nested"
