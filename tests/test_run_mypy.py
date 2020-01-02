@@ -81,6 +81,15 @@ cases: List[Tuple[str, Expect]] = [
             exit_status=1,
         ),
     ),
+    (
+        "hard.py",
+        Expect(
+            normal="""
+            """,
+            error="",
+            exit_status=1,
+        ),
+    ),
 ]
 
 

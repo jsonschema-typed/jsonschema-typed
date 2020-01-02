@@ -1,0 +1,111 @@
+{
+  "$id": "hard.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Complicated JSON meant to test all kinds of things.",
+  "title": "Complicated JSON",
+  "type": "object",
+  "properties": {
+    "num": {
+      "description": "a number",
+      "type": "integer"
+    },
+    "status": {
+      "description": "List of return messages",
+      "items": {
+        "additionalProperties": false,
+        "description": "Return messages metadata",
+        "properties": {
+          "code": {
+            "description": "The return message code",
+            "enum": [
+              "success",
+              "failure"
+            ],
+            "type": "string"
+          },
+          "diagnostics": {
+            "description": "Detailed diagnostics for the status",
+            "items": {
+              "additionalProperties": false,
+              "properties": {
+                "field": {
+                  "description": "Offending field of the offending value",
+                  "type": "string"
+                },
+                "illegal_value": {
+                  "description": "Offending value",
+                  "type": "string"
+                },
+                "level": {
+                  "description": "Level of diagnostics (info, warn, error)",
+                  "enum": [
+                    "info",
+                    "warn",
+                    "error"
+                  ],
+                  "type": "string"
+                },
+                "mismatch_fields": {
+                  "description": "Offending incompatible fields (or field values)",
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                "ids": {
+                  "description": "The IDs of the offending things",
+                  "items": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "id": {
+                        "type": "integer"
+                      },
+                      "thing_type": {
+                        "enum": [
+                          "A",
+                          "B"
+                        ],
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "id"
+                    ],
+                    "type": "object"
+                  },
+                  "type": "array"
+                }
+              },
+              "required": [
+                "level"
+              ],
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "message": {
+            "description": "The return message (human readable) associated with the return message code",
+            "type": "string"
+          },
+          "module": {
+            "description": "Module where the status comes from",
+            "enum": [
+              "m1",
+              "m2"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "module"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    }
+  },
+  "required": [
+    "num",
+    "status"
+  ]
+}
