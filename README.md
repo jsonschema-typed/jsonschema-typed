@@ -3,7 +3,7 @@
 This package provides a way to automatically produce type annotations based
 on [`jsonschema`-schemas](https://json-schema.org).
 
-Not all concepts covered by `jsonschema` is expressible within Python typing annotations. However, most things
+Not all concepts covered by `jsonschema` are expressible within Python typing annotations. However, most things
 will work like you'd expect. Most types are translated trivially
 (`integer`, `number`, `string`, `array`, `boolean` and `null`).
 The interesting type is `object`, which is translated into a [``TypedDict``](https://www.python.org/dev/peps/pep-0589/).
@@ -48,8 +48,8 @@ from jsonschema_typed import JSONSchema
 data: JSONSchema["path/to/schema.json"] = {"title": "baz"}
 
 if TYPE_CHECKING:
-    reveal_type(data)  # Revealed type is 'TypedDict('FooSchema', {'title'?: builtins.str,
-                                                                   'awesome'?: Union[builtins.int, builtins.float]})'
+    reveal_type(data)  # Revealed type is 'TypedDict('FooSchema', {'title': builtins.str,
+                       #                                           'awesome'?: Union[builtins.int, builtins.float]})'
 data["description"] = "there is no description"  # TypedDict "FooSchema" has no key 'description'
 data["awesome"] = 42
 data["awesome"] = None  # Argument 2 has incompatible type "None"; expected "Union[int, float]"
