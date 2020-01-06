@@ -25,9 +25,7 @@ setup(
         "jsonschema>=3.2.0",
         "mypy>=0.761",
     ],  # Possibly not so strict, but don't want to check.
-    long_description=(
-        """This is a fork of Erick Peirson's original `jsonschema_typed`.\n\n"""
-        + description
-    ),
+    description="Automatic type annotations from JSON schemas",
+    long_description=description,
     long_description_content_type="text/markdown",
 )
