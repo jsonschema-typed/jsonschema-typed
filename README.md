@@ -72,7 +72,7 @@ Testing has been done with versions:
 - mypy==0.761
 - jsonschema==3.2.0
 
-Probably some older versions will also work. Report an [issue](https://github.com/bsamseth/jsonschema-typed/issues)
+Probably some older versions will also work. Report an [issue](https://github.com/inspera/jsonschema-typed/issues)
 if you need other versions.
 
 ## Limitations
