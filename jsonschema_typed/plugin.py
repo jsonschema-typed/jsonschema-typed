@@ -123,7 +123,10 @@ class API:
         if scope:
             self.resolver.pop_scope()
 
-        assert isinstance(schema_type, str)
+        assert isinstance(schema_type, str), (
+            f"Expected to find a supported schema type, got {schema_type}"
+            f"\nDuring parsing of {schema}"
+        )
 
         return self._get_type(ctx, schema, schema_type, outer=outer)
 
