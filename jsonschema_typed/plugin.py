@@ -116,6 +116,8 @@ class API:
                 return self.allOf(ctx, schema["allOf"])
             elif "anyOf" in schema:
                 return self.anyOf(ctx, schema["anyOf"])
+            elif "oneOf" in schema:
+                return self.anyOf(ctx, schema["oneOf"])
             elif "enum" in schema:
                 return self.enum(ctx, schema["enum"])
             elif "default" in schema:
