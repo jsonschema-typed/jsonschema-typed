@@ -1,3 +1,6 @@
+import logging
+from typing import Union, Any
+
 from mypy.plugin import Plugin, AnalyzeTypeContext
 from mypy.types import TypedDictType
 import warnings
@@ -13,7 +16,7 @@ class OptionalTypedDictPlugin(Plugin):
     def get_type_analyze_hook(self, fullname: str):
         if fullname == self.OptionalTypedDict:
 
-            def callback(ctx: AnalyzeTypeContext) -> TypedDictType:
+            def callback(ctx: AnalyzeTypeContext) -> Union[Any, TypedDictType]:
                 """Generate annotations from a TypedDict with optional attributes."""
                 if not ctx.type.args:
                     return ctx.type
@@ -24,9 +27,16 @@ class OptionalTypedDictPlugin(Plugin):
                 # Then remove its required keys. If this doesn't work, the type wasn't a typed dict.
                 # If so, we just return back whatever the user gave us.
                 try:
-                    typed_dict_type.required_keys = set()
+                    try:
+                        typed_dict_type.required_keys = set()
+                    except AttributeError:
+                        typed_dict_type.alias.target.required_keys = set()
                 except AttributeError:
-                    pass
+                    logging.error(
+                        "Failed making OptionalTypedDict: Argument in brackets is not a typed dict type.\n"
+                        f"Failed at line {ctx.context.line} column {ctx.context.column} (file not known).\n"
+                        "The argument in brackets will be used instead."
+                    )
 
                 return typed_dict_type
 

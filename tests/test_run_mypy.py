@@ -109,6 +109,18 @@ cases: List[Tuple[str, Expect]] = [
             exit_status=1,
         ),
     ),
+    (
+        "optional_typed_dict_hard_mode.py",
+        Expect(
+            normal="""
+                note: Revealed type is 'TypedDict('ComplicatedJson', {'num'?: builtins.int, 'status'?: builtins.list[TypedDict({'code'?: Union[Literal['success'], Literal['failure']], 'diagnostics'?: builtins.list[TypedDict({'field'?: builtins.str, 'illegal_value'?: builtins.str, 'level': Union[Literal['info'], Literal['warn'], Literal['error']], 'mismatch_fields'?: builtins.list[builtins.str], 'ids'?: builtins.list[TypedDict({'id': builtins.int, 'thing_type'?: Union[Literal['A'], Literal['B']]})]})], 'message'?: builtins.str, 'module': Union[Literal['m1'], Literal['m2']]})]})'
+                error: TypedDict "ComplicatedJson" has no key 'description'
+                error: Argument 2 has incompatible type "None"; expected "int"
+            """,
+            error="",
+            exit_status=1,
+        ),
+    ),
 ]
 
 
