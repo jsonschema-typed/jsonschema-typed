@@ -97,13 +97,25 @@ cases: List[Tuple[str, Expect]] = [
             exit_status=1,
         ),
     ),
+    (
+        "optional_typed_dict.py",
+        Expect(
+            normal="""
+                note: Revealed type is 'TypedDict('FooSchema', {'title'?: builtins.str, 'awesome'?: builtins.int})'
+                error: TypedDict "FooSchema" has no key 'description'
+                error: Argument 2 has incompatible type "None"; expected "int"
+            """,
+            error="",
+            exit_status=1,
+        ),
+    ),
 ]
 
 
 @pytest.mark.parametrize("case_file, expected", cases)
 def test_cases(case_file: str, expected: Expect):
     normal_report, error_report, exit_status = api.run(
-        [os.path.join(case_directory, case_file)]
+        ["--show-traceback", os.path.join(case_directory, case_file)]
     )
 
     for line in expected["normal"].strip().splitlines():

@@ -28,7 +28,7 @@ from mypy.types import (
 )
 
 # Raise issues here.
-ISSUE_URL = "https://github.com/bsamseth/jsonschema-typed"
+ISSUE_URL = "https://github.com/inspera/jsonschema-typed"
 
 
 # Monkey-patching `warnings.formatwarning`.
