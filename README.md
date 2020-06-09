@@ -10,7 +10,6 @@ The interesting type is `object`, which is translated into a [``TypedDict``](htt
 
 **Warning:** This is based on the [mypy plugin system](https://mypy.readthedocs.io/en/latest/extending_mypy.html), which
 is stated to have no backwards compatibility guarantee. New versions of mypy might not be supported immediately.
-have been warned.
 
 **Note**: This is a maintained fork of [erickpeirson](https://github.com/erickpeirson/jsonschema-typed)'s original start
 on this project. The original repo seems to be abandoned and its current state is not functional. *Make sure to install
@@ -62,6 +61,14 @@ You can also get types of parts of a schema, as well as types of elements in arr
 
 ```bash
 pip install jsonschema-typed-v2
+```
+
+You also need to enable the plugin(s) in your `mypy.ini` configuration file:
+
+```toml
+# mypy.ini
+[mypy]
+plugins = jsonschema_typed.plugin, jsonschema_typed.optional_typed_dict
 ```
 
 ## Requirements
