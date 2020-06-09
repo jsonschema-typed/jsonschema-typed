@@ -75,6 +75,10 @@ You also need to enable the plugin(s) in your `mypy.ini` configuration file:
 # mypy.ini
 [mypy]
 plugins = jsonschema_typed.plugin, jsonschema_typed.optional_typed_dict
+
+# Due to a quirk of how these type hints are generated, mypy's caching breaks.
+# Disabling caching might be required.
+cache_dir = /dev/null
 ```
 
 ## Requirements
