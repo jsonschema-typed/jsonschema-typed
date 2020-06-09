@@ -1,3 +1,8 @@
+[![PyPI version](https://img.shields.io/pypi/v/jsonschema-typed-v2.svg?logo=pypi&logoColor=FFE873)](https://pypi.org/project/jsonschema-typed-v2/)
+[![PyPI downloads](https://img.shields.io/pypi/dm/jsonschema-typed-v2)](https://pypistats.org/packages/jsonschema-typed-v2)
+[![License](https://img.shields.io/pypi/l/jsonschema-typed-v2)](LICENSE)
+[![Code style: Black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+
 # JSON Schema-powered type annotations
 
 This package provides a way to automatically produce type annotations based
