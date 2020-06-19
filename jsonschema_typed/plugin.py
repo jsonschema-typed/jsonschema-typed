@@ -457,7 +457,7 @@ class JSONSchemaPlugin(Plugin):
         # Only inherit the require things, all other info is dropped.
         # E.g. things such as `required` do not affect schemas for sub-objects.
         for k in list(schema.keys()):
-            if k not in ("$schema", "$id", "title", "type", "properties"):
+            if k not in ("$schema", "$id", "title", "type", "properties", "items"):
                 del schema[k]
 
         for key in key_path:

@@ -1,0 +1,30 @@
+{
+  "$id": "ArrayOfObjects.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "An object inside an outer array",
+  "items": {
+    "properties": {
+      "a_number": {
+        "type": "integer"
+      },
+      "a_string": {
+        "type": "string"
+      },
+      "nested_array_of_numbers": {
+        "items": {
+          "items": {
+            "type": "number"
+          },
+          "type": "array"
+        },
+        "type": "array"
+      }
+    },
+    "required": [
+      "a_string"
+    ],
+    "type": "object"
+  },
+  "title": "Array of Objects",
+  "type": "array"
+}

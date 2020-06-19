@@ -121,6 +121,17 @@ cases: List[Tuple[str, Expect]] = [
             exit_status=1,
         ),
     ),
+    (
+        "outer_array.py",
+        Expect(
+            normal="""
+            note: Revealed type is 'builtins.list[TypedDict({'a_number'?: builtins.int, 'a_string': builtins.str, 'nested_array_of_numbers'?: builtins.list[builtins.list[builtins.float]]})]'
+            note: Revealed type is 'TypedDict('ArrayOfObjects', {'a_number'?: builtins.int, 'a_string': builtins.str, 'nested_array_of_numbers'?: builtins.list[builtins.list[Union[builtins.int, builtins.float]]]})'
+            """,
+            error="",
+            exit_status=1,
+        ),
+    ),
 ]
 
 
