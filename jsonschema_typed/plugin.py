@@ -274,6 +274,14 @@ class APIv4(API):
             inner_types = [AnyType(TypeOfAny.unannotated)]
         elif items is False:
             raise NotImplementedError('"items": false is not supported')
+        elif isinstance(items, list):
+            # https://json-schema.org/understanding-json-schema/reference/array.html#tuple-validation
+            if {schema.get("minItems"), schema.get("maxItems")} - {None, len(items)}:
+                raise NotImplementedError(
+                    '"items": If list, must have minItems == maxItems'
+                )
+            inner_types = [self.get_type(ctx, item) for item in items]
+            return ctx.api.tuple_type(inner_types)
         elif items is not None:
             inner_types = [self.get_type(ctx, items)]
         else:

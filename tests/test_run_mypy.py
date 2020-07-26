@@ -132,6 +132,21 @@ cases: List[Tuple[str, Expect]] = [
             exit_status=1,
         ),
     ),
+    (
+        "tuple.py",
+        Expect(
+            normal="""
+            tests/cases/tuple.py:9: error: List item 0 has incompatible type "List[str]"; expected "Optional[Tuple[Optional[str], Optional[str]]]"
+            tests/cases/tuple.py:10: error: List item 0 has incompatible type "Tuple[str, str, str]"; expected "Optional[Tuple[Optional[str], Optional[str]]]"
+            tests/cases/tuple.py:11: error: List item 0 has incompatible type "int"; expected "Optional[Tuple[Optional[str], Optional[str]]]"
+            tests/cases/tuple.py:12: error: List item 0 has incompatible type "Tuple[int, int]"; expected "Optional[Tuple[Optional[str], Optional[str]]]"
+            tests/cases/tuple.py:15: note: Revealed type is 'builtins.list[Union[Tuple[Union[builtins.str, None], Union[builtins.str, None]], None]]'
+            Found 4 errors in 1 file (checked 1 source file)
+            """,
+            error="",
+            exit_status=1,
+        ),
+    ),
 ]
 
 
