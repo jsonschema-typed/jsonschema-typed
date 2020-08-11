@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "$id": "http://foo.qwerty/some/schema#",
+  "title": "List of tuples",
+  "type": "array",
+  "items": {
+    "type": [
+      "array",
+      "null"
+    ],
+    "items": [
+      {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    ],
+    "maxItems": 2,
+    "minItems": 2
+  }
+}
