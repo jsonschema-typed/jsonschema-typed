@@ -6,6 +6,7 @@ import re
 import uuid
 import importlib
 import warnings
+from packaging.version import Version
 from collections import OrderedDict
 from typing import Optional, Callable, Any, Union, List, Set, Dict
 from abc import abstractmethod
@@ -580,7 +581,7 @@ class TypeMaker:
 
 def plugin(version: str):
     """See `https://mypy.readthedocs.io/en/latest/extending_mypy.html`_."""
-    if float(version) < 0.7:
+    if Version(version) < Version("0.7"):
         warnings.warn(
             "This plugin not tested below mypy 0.710. But you can"
             f" test it and let us know at {ISSUE_URL}."
