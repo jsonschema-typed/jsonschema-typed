@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "$id": "http://foo.qwerty/some/schema#",
+  "title": "Foo Schema",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "awesome": {
+      "type": "integer"
+    }
+  }
+}

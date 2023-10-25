@@ -1,0 +1,36 @@
+{
+  "$id": "http://foo.qwerty/some/schema#",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "Nested Foo Schema",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "awesome": {
+      "type": "object",
+      "properties": {
+        "nested": {
+          "type": "object",
+          "properties": {
+            "thing": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "thing"
+          ]
+        },
+        "thing": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "thing"
+      ]
+    }
+  },
+  "required": [
+    "title"
+  ]
+}

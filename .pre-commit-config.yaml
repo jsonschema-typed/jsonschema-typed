@@ -1,0 +1,20 @@
+repos:
+-   repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v2.3.0
+    hooks:
+    -   id: check-yaml
+    -   id: check-toml
+    -   id: end-of-file-fixer
+    -   id: trailing-whitespace
+    -   id: pretty-format-json
+        args: [--autofix, --no-sort-keys]
+    -   id: check-builtin-literals
+    -   id: check-docstring-first
+    -   id: check-merge-conflict
+    -   id: mixed-line-ending
+        args: [--fix=lf]
+-   repo: https://github.com/ambv/black
+    rev: stable
+    hooks:
+    - id: black
+      language_version: python3.7
