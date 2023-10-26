@@ -1,7 +1,7 @@
-[![PyPI version](https://img.shields.io/pypi/v/jsonschema-typed-v2.svg?logo=pypi&logoColor=FFE873)](https://pypi.org/project/jsonschema-typed-v2/)
-[![Python version](https://img.shields.io/pypi/pyversions/jsonschema-typed-v2)](https://pypi.org/project/jsonschema-typed-v2/)
-[![PyPI downloads](https://img.shields.io/pypi/dm/jsonschema-typed-v2)](https://pypistats.org/packages/jsonschema-typed-v2)
-[![License](https://img.shields.io/pypi/l/jsonschema-typed-v2)](LICENSE)
+[![PyPI version](https://img.shields.io/pypi/v/jsonschema-typed.svg?logo=pypi&logoColor=FFE873)](https://pypi.org/project/jsonschema-typed/)
+[![Python version](https://img.shields.io/pypi/pyversions/jsonschema-typed)](https://pypi.org/project/jsonschema-typed/)
+[![PyPI downloads](https://img.shields.io/pypi/dm/jsonschema-typed)](https://pypistats.org/packages/jsonschema-typed)
+[![License](https://img.shields.io/pypi/l/jsonschema-typed)](LICENSE)
 [![Code style: Black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 # JSON Schema-powered type annotations
@@ -16,10 +16,6 @@ The interesting type is `object`, which is translated into a [``TypedDict``](htt
 
 **Warning:** This is based on the [mypy plugin system](https://mypy.readthedocs.io/en/latest/extending_mypy.html), which
 is stated to have no backwards compatibility guarantee. New versions of mypy might not be supported immediately.
-
-**Note**: This is a maintained fork of [erickpeirson](https://github.com/erickpeirson/jsonschema-typed)'s original start
-on this project. The original repo seems to be abandoned and its current state is not functional. *Make sure to install
-the right package from PyPI, `jsonschema-typed-v2`*
 
 ## Example
 
@@ -66,7 +62,7 @@ You can also get types of parts of a schema, as well as types of elements in arr
 ## Installation
 
 ```bash
-pip install jsonschema-typed-v2
+pip install jsonschema-typed
 ```
 
 You also need to enable the plugin(s) in your `mypy.ini` configuration file:
@@ -89,7 +85,7 @@ Testing has been done with versions:
 - mypy==0.761
 - jsonschema==3.2.0
 
-Probably some older versions will also work. Report an [issue](https://github.com/inspera/jsonschema-typed/issues)
+Probably some older versions will also work. Report an [issue](https://github.com/jsonschema-typed/jsonschema-typed/issues)
 if you need other versions.
 
 ## Limitations
