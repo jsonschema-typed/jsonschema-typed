@@ -11,10 +11,10 @@ with open(os.path.join(repo_base_dir, "README.md")) as f:
     description = f.read()
 
 setup(
-    name="jsonschema-typed-v2",
-    author="Bendik Samseth",
-    author_email="b.samseth@gmail.com",
-    url="https://github.com/bsamseth/jsonschema-typed",
+    name="jsonschema-typed",
+    author="Erick Peirson, Bendik Samseth, Felix von Drigalski",
+    author_email="FvDrigalski@gmail.com",
+    url="https://github.com/jsonschema-typed/jsonschema-typed",
     python_requires=">=3.7",  # Really should have 3.8 for Final and Literal, but usable without.
     license="MIT",
     version=get_version(),

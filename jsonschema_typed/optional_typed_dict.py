@@ -6,7 +6,7 @@ from mypy.types import TypedDictType
 import warnings
 
 # Raise issues here.
-ISSUE_URL = "https://github.com/inspera/jsonschema-typed"
+ISSUE_URL = "https://github.com/jsonschema-typed/jsonschema-typed"
 
 
 class OptionalTypedDictPlugin(Plugin):
