@@ -538,11 +538,15 @@ class JSONSchemaPlugin(Plugin):
                     schema = self.make_subschema(schema, key_path)
 
                 draft_version = schema.get("$schema", "default")
-                api_version = {
-                    "draft-04": APIv4,
-                    "draft-06": APIv6,
-                    "draft-07": APIv7,
-                }.get(next(re.finditer(r"draft-\d+", draft_version)).group(), APIv7)
+
+                if re.search(r"draft-\d+", draft_version) is not None:
+                    api_version = {
+                        "draft-04": APIv4,
+                        "draft-06": APIv6,
+                        "draft-07": APIv7,
+                    }.get(next(re.finditer(r"draft-\d+", draft_version)).group(), APIv7)
+                else:
+                    api_version = APIv7
 
                 make_type = TypeMaker(schema_path, schema, api_version=api_version)
                 _type = make_type(ctx)
