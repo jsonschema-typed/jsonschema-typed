@@ -528,9 +528,11 @@ class JSONSchemaPlugin(Plugin):
                 if not ctx.type.args:
                     return ctx.type
                 schema_path, *key_path = list(map(self.resolve_var, ctx.type.args))
-
-                schema_path = os.path.abspath(schema_path)
-                schema = self._load_schema(schema_path)
+                if isinstance(schema_path, dict):
+                    schema = schema_path
+                else:
+                    schema_path = os.path.abspath(schema_path)
+                    schema = self._load_schema(schema_path)
 
                 if key_path:
                     schema = self.make_subschema(schema, key_path)
