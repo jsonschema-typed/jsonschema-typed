@@ -540,11 +540,12 @@ class JSONSchemaPlugin(Plugin):
                 """Generate annotations from a JSON Schema."""
                 if not ctx.type.args:
                     return ctx.type
-                schema_path, *key_path = list(map(self.resolve_var, ctx.type.args))
-                if isinstance(schema_path, dict):
-                    schema = schema_path
+                schema_or_path, *key_path = list(map(self.resolve_var, ctx.type.args))
+                if isinstance(schema_or_path, dict):
+                    schema = schema_or_path
+                    schema_path = ctx.type.args[0].literal_value if isinstance(ctx.type.args[0], RawExpressionType) else ctx.type.args[0].original_str_expr  # Only for reference.
                 else:
-                    schema_path = os.path.abspath(schema_path)
+                    schema_path = os.path.abspath(schema_or_path)
                     schema = self._load_schema(schema_path)
 
                 if key_path:
