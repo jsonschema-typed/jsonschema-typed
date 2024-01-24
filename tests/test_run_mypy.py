@@ -25,9 +25,9 @@ cases: List[Tuple[str, Expect]] = [
         "from_readme.py",
         Expect(
             normal="""
-                note: Revealed type is 'TypedDict('FooSchema', {'title'?: builtins.str, 'awesome'?: builtins.int})'
-                error: TypedDict "FooSchema" has no key 'description'
-                error: Argument 2 has incompatible type "None"; expected "int"
+                note: Revealed type is "TypedDict('FooSchema', {'title'?: builtins.str, 'awesome'?: builtins.int})"
+                error: TypedDict "FooSchema" has no key "description"
+                error: Value of "awesome" has incompatible type "None"; expected "int"
             """,
             error="",
             exit_status=1,
@@ -37,10 +37,10 @@ cases: List[Tuple[str, Expect]] = [
         "check_required.py",
         Expect(
             normal="""
-                error: Key 'awesome' missing for TypedDict "FooSchema"
-                note: Revealed type is 'TypedDict('FooSchema', {'title'?: builtins.str, 'awesome': builtins.int})'
-                error: TypedDict "FooSchema" has no key 'description'
-                error: Argument 2 has incompatible type "None"; expected "int"
+                error: Missing key "awesome" for TypedDict "FooSchema"
+                note: Revealed type is "TypedDict('FooSchema', {'title'?: builtins.str, 'awesome': builtins.int})"
+                error: TypedDict "FooSchema" has no key "description"
+                error: Value of "awesome" has incompatible type "None"; expected "int"
             """,
             error="",
             exit_status=1,
@@ -50,9 +50,9 @@ cases: List[Tuple[str, Expect]] = [
         "alias.py",
         Expect(
             normal="""
-                note: Revealed type is 'TypedDict('FooSchema', {'title'?: builtins.str, 'awesome'?: builtins.int})'
-                error: TypedDict "FooSchema" has no key 'description'
-                error: Argument 2 has incompatible type "None"; expected "int"
+                note: Revealed type is "TypedDict('FooSchema', {'title'?: builtins.str, 'awesome'?: builtins.int})"
+                error: TypedDict "FooSchema" has no key "description"
+                error: Value of "awesome" has incompatible type "None"; expected "int"
             """,
             error="",
             exit_status=1,
@@ -62,8 +62,8 @@ cases: List[Tuple[str, Expect]] = [
         "nonetype.py",
         Expect(
             normal="""
-                note: Revealed type is 'TypedDict('NoneSchema', {'title'?: builtins.str, 'awesome'?: Union[builtins.list[Any], None]})'
-                error: Argument 2 has incompatible type "int"; expected "Optional[List[Any]]"
+                note: Revealed type is "TypedDict('NoneSchema', {'title'?: builtins.str, 'awesome'?: Union[builtins.list[Any], None]})"
+                error: Value of "awesome" has incompatible type "int"; expected "Optional[list[Any]]"
             """,
             error="",
             exit_status=1,
@@ -73,9 +73,9 @@ cases: List[Tuple[str, Expect]] = [
         "nested.py",
         Expect(
             normal="""
-                note: Revealed type is 'TypedDict('NestedFooSchema', {'title': builtins.str, 'awesome'?: TypedDict({'nested'?: TypedDict({'thing': builtins.str}), 'thing': builtins.int})})'
-                note: Revealed type is 'TypedDict('NestedFooSchemaAwesome', {'nested'?: TypedDict({'thing': builtins.str}), 'thing': builtins.int})'
-                note: Revealed type is 'TypedDict('NestedFooSchemaAwesomeNested', {'thing': builtins.str})'
+                note: Revealed type is "TypedDict('NestedFooSchema', {'title': builtins.str, 'awesome'?: TypedDict({'nested'?: TypedDict({'thing': builtins.str}), 'thing': builtins.int})})"
+                note: Revealed type is "TypedDict('NestedFooSchemaAwesome', {'nested'?: TypedDict({'thing': builtins.str}), 'thing': builtins.int})"
+                note: Revealed type is "TypedDict('NestedFooSchemaAwesomeNested', {'thing': builtins.str})"
             """,
             error="",
             exit_status=1,
@@ -85,13 +85,13 @@ cases: List[Tuple[str, Expect]] = [
         "hard.py",
         Expect(
             normal="""
-                note: Revealed type is 'TypedDict('ComplicatedJson', {'num': builtins.int, 'status': builtins.list[TypedDict({'code'?: Union[Literal['success'], Literal['failure']], 'diagnostics'?: builtins.list[TypedDict({'field'?: builtins.str, 'illegal_value'?: builtins.str, 'level': Union[Literal['info'], Literal['warn'], Literal['error']], 'mismatch_fields'?: builtins.list[builtins.str], 'ids'?: builtins.list[TypedDict({'id': builtins.int, 'thing_type'?: Union[Literal['A'], Literal['B']]})]})], 'message'?: builtins.str, 'module': Union[Literal['m1'], Literal['m2']]})]})'
-                note: Revealed type is 'builtins.int'
-                note: Revealed type is 'builtins.list[TypedDict({'code'?: Union[Literal['success'], Literal['failure']], 'diagnostics'?: builtins.list[TypedDict({'field'?: builtins.str, 'illegal_value'?: builtins.str, 'level': Union[Literal['info'], Literal['warn'], Literal['error']], 'mismatch_fields'?: builtins.list[builtins.str], 'ids'?: builtins.list[TypedDict({'id': builtins.int, 'thing_type'?: Union[Literal['A'], Literal['B']]})]})], 'message'?: builtins.str, 'module': Union[Literal['m1'], Literal['m2']]})]'
-                note: Revealed type is 'TypedDict({'code'?: Union[Literal['success'], Literal['failure']], 'diagnostics'?: builtins.list[TypedDict({'field'?: builtins.str, 'illegal_value'?: builtins.str, 'level': Union[Literal['info'], Literal['warn'], Literal['error']], 'mismatch_fields'?: builtins.list[builtins.str], 'ids'?: builtins.list[TypedDict({'id': builtins.int, 'thing_type'?: Union[Literal['A'], Literal['B']]})]})], 'message'?: builtins.str, 'module': Union[Literal['m1'], Literal['m2']]})'
-                note: Revealed type is 'builtins.list[TypedDict({'field'?: builtins.str, 'illegal_value'?: builtins.str, 'level': Union[Literal['info'], Literal['warn'], Literal['error']], 'mismatch_fields'?: builtins.list[builtins.str], 'ids'?: builtins.list[TypedDict({'id': builtins.int, 'thing_type'?: Union[Literal['A'], Literal['B']]})]})]'
-                note: Revealed type is 'TypedDict({'field'?: builtins.str, 'illegal_value'?: builtins.str, 'level': Union[Literal['info'], Literal['warn'], Literal['error']], 'mismatch_fields'?: builtins.list[builtins.str], 'ids'?: builtins.list[TypedDict({'id': builtins.int, 'thing_type'?: Union[Literal['A'], Literal['B']]})]})'
-                note: Revealed type is 'TypedDict('ComplicatedJsonStatusDiagnostics', {'field'?: builtins.str, 'illegal_value'?: builtins.str, 'level': Union[Literal['info'], Literal['warn'], Literal['error']], 'mismatch_fields'?: builtins.list[builtins.str], 'ids'?: builtins.list[TypedDict({'id': builtins.int, 'thing_type'?: Union[Literal['A'], Literal['B']]})]})'
+                note: Revealed type is "TypedDict('ComplicatedJson', {'num': builtins.int, 'status': builtins.list[TypedDict({'code'?: Union[Literal['success'], Literal['failure']], 'diagnostics'?: builtins.list[TypedDict({'field'?: builtins.str, 'illegal_value'?: builtins.str, 'level': Union[Literal['info'], Literal['warn'], Literal['error']], 'mismatch_fields'?: builtins.list[builtins.str], 'ids'?: builtins.list[TypedDict({'id': builtins.int, 'thing_type'?: Union[Literal['A'], Literal['B']]})]})], 'message'?: builtins.str, 'module': Union[Literal['m1'], Literal['m2']]})]})"
+                note: Revealed type is "builtins.int"
+                note: Revealed type is "builtins.list[TypedDict({'code'?: Union[Literal['success'], Literal['failure']], 'diagnostics'?: builtins.list[TypedDict({'field'?: builtins.str, 'illegal_value'?: builtins.str, 'level': Union[Literal['info'], Literal['warn'], Literal['error']], 'mismatch_fields'?: builtins.list[builtins.str], 'ids'?: builtins.list[TypedDict({'id': builtins.int, 'thing_type'?: Union[Literal['A'], Literal['B']]})]})], 'message'?: builtins.str, 'module': Union[Literal['m1'], Literal['m2']]})]"
+                note: Revealed type is "TypedDict({'code'?: Union[Literal['success'], Literal['failure']], 'diagnostics'?: builtins.list[TypedDict({'field'?: builtins.str, 'illegal_value'?: builtins.str, 'level': Union[Literal['info'], Literal['warn'], Literal['error']], 'mismatch_fields'?: builtins.list[builtins.str], 'ids'?: builtins.list[TypedDict({'id': builtins.int, 'thing_type'?: Union[Literal['A'], Literal['B']]})]})], 'message'?: builtins.str, 'module': Union[Literal['m1'], Literal['m2']]})"
+                note: Revealed type is "builtins.list[TypedDict({'field'?: builtins.str, 'illegal_value'?: builtins.str, 'level': Union[Literal['info'], Literal['warn'], Literal['error']], 'mismatch_fields'?: builtins.list[builtins.str], 'ids'?: builtins.list[TypedDict({'id': builtins.int, 'thing_type'?: Union[Literal['A'], Literal['B']]})]})]"
+                note: Revealed type is "TypedDict({'field'?: builtins.str, 'illegal_value'?: builtins.str, 'level': Union[Literal['info'], Literal['warn'], Literal['error']], 'mismatch_fields'?: builtins.list[builtins.str], 'ids'?: builtins.list[TypedDict({'id': builtins.int, 'thing_type'?: Union[Literal['A'], Literal['B']]})]})"
+                note: Revealed type is "TypedDict('ComplicatedJsonStatusDiagnostics', {'field'?: builtins.str, 'illegal_value'?: builtins.str, 'level': Union[Literal['info'], Literal['warn'], Literal['error']], 'mismatch_fields'?: builtins.list[builtins.str], 'ids'?: builtins.list[TypedDict({'id': builtins.int, 'thing_type'?: Union[Literal['A'], Literal['B']]})]})"
             """,
             error="",
             exit_status=1,
@@ -101,9 +101,9 @@ cases: List[Tuple[str, Expect]] = [
         "optional_typed_dict.py",
         Expect(
             normal="""
-                note: Revealed type is 'TypedDict('FooSchema', {'title'?: builtins.str, 'awesome'?: builtins.int})'
-                error: TypedDict "FooSchema" has no key 'description'
-                error: Argument 2 has incompatible type "None"; expected "int"
+                note: Revealed type is "TypedDict('FooSchema', {'title'?: builtins.str, 'awesome'?: builtins.int})"
+                error: TypedDict "FooSchema" has no key "description"
+                error: Value of "awesome" has incompatible type "None"; expected "int"
             """,
             error="",
             exit_status=1,
@@ -113,9 +113,9 @@ cases: List[Tuple[str, Expect]] = [
         "optional_typed_dict_hard_mode.py",
         Expect(
             normal="""
-                note: Revealed type is 'TypedDict('ComplicatedJson', {'num'?: builtins.int, 'status'?: builtins.list[TypedDict({'code'?: Union[Literal['success'], Literal['failure']], 'diagnostics'?: builtins.list[TypedDict({'field'?: builtins.str, 'illegal_value'?: builtins.str, 'level': Union[Literal['info'], Literal['warn'], Literal['error']], 'mismatch_fields'?: builtins.list[builtins.str], 'ids'?: builtins.list[TypedDict({'id': builtins.int, 'thing_type'?: Union[Literal['A'], Literal['B']]})]})], 'message'?: builtins.str, 'module': Union[Literal['m1'], Literal['m2']]})]})'
-                error: TypedDict "ComplicatedJson" has no key 'description'
-                error: Argument 2 has incompatible type "None"; expected "int"
+                note: Revealed type is "TypedDict('ComplicatedJson', {'num'?: builtins.int, 'status'?: builtins.list[TypedDict({'code'?: Union[Literal['success'], Literal['failure']], 'diagnostics'?: builtins.list[TypedDict({'field'?: builtins.str, 'illegal_value'?: builtins.str, 'level': Union[Literal['info'], Literal['warn'], Literal['error']], 'mismatch_fields'?: builtins.list[builtins.str], 'ids'?: builtins.list[TypedDict({'id': builtins.int, 'thing_type'?: Union[Literal['A'], Literal['B']]})]})], 'message'?: builtins.str, 'module': Union[Literal['m1'], Literal['m2']]})]})"
+                error: TypedDict "ComplicatedJson" has no key "description"
+                error: Value of "num" has incompatible type "None"; expected "int"
             """,
             error="",
             exit_status=1,
@@ -125,8 +125,8 @@ cases: List[Tuple[str, Expect]] = [
         "outer_array.py",
         Expect(
             normal="""
-            note: Revealed type is 'builtins.list[TypedDict({'a_number'?: builtins.int, 'a_string': builtins.str, 'nested_array_of_numbers'?: builtins.list[builtins.list[builtins.float]]})]'
-            note: Revealed type is 'TypedDict('ArrayOfObjects', {'a_number'?: builtins.int, 'a_string': builtins.str, 'nested_array_of_numbers'?: builtins.list[builtins.list[Union[builtins.int, builtins.float]]]})'
+            note: Revealed type is "builtins.list[TypedDict({'a_number'?: builtins.int, 'a_string': builtins.str, 'nested_array_of_numbers'?: builtins.list[builtins.list[Union[builtins.int, builtins.float]]]})]"
+            note: Revealed type is "TypedDict('ArrayOfObjects', {'a_number'?: builtins.int, 'a_string': builtins.str, 'nested_array_of_numbers'?: builtins.list[builtins.list[Union[builtins.int, builtins.float]]]})"
             """,
             error="",
             exit_status=1,
@@ -140,7 +140,7 @@ cases: List[Tuple[str, Expect]] = [
             tests/cases/tuple.py:10: error: List item 0 has incompatible type "Tuple[str, str, str]"; expected "Optional[Tuple[Optional[str], Optional[str]]]"
             tests/cases/tuple.py:11: error: List item 0 has incompatible type "int"; expected "Optional[Tuple[Optional[str], Optional[str]]]"
             tests/cases/tuple.py:12: error: List item 0 has incompatible type "Tuple[int, int]"; expected "Optional[Tuple[Optional[str], Optional[str]]]"
-            tests/cases/tuple.py:15: note: Revealed type is 'builtins.list[Union[Tuple[Union[builtins.str, None], Union[builtins.str, None]], None]]'
+            tests/cases/tuple.py:15: note: Revealed type is "builtins.list[Union[Tuple[Union[builtins.str, None], Union[builtins.str, None]], None]]"
             Found 4 errors in 1 file (checked 1 source file)
             """,
             error="",
