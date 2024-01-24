@@ -56,8 +56,14 @@ data["awesome"] = 42
 data["awesome"] = None  # Argument 2 has incompatible type "None"; expected "Union[int, float]"
 ```
 
-You can also get types of parts of a schema, as well as types of elements in arrays. Take a look at the
-[test cases](tests/cases) for more examples of usage.
+You can also get types of parts of a schema, as well as types of elements in arrays, e.g.:
+
+```python
+subschema: JSONSchema['schema/myschema.json', 'keyname1', 'keyname2']
+schema: JSONSchema['var:modulename:variablename']
+```
+
+Take a look at the [test cases](tests/cases) for more usage examples.
 
 ## Installation
 
