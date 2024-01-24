@@ -506,6 +506,19 @@ class JSONSchemaPlugin(Plugin):
 
     @staticmethod
     def resolve_var(value: Union[RawExpressionType, UnboundType]):
+        """Parses a string that starts with "var:" and returns the referenced variable. Strings that don't start with "var:" are returned as is.
+
+        The string can be one of these formats:
+
+        "var:module_path:variable_name"
+        "var:module_path.submodule:variable_name"
+        "var:module_path:variable_name.attribute"
+        etc.
+
+        variable_name references a variable that contains either a string or a dictionary containing a parsed JSON schema.
+
+        module_path is an optional module reference that variable_name can be loaded from.
+        """
         var: str
         if isinstance(value, RawExpressionType):
             var = value.literal_value
